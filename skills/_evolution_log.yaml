@@ -1,0 +1,14 @@
+# Skill Evolution Log
+# Records all changes to skills, confidence, and patterns
+
+evolution_log:
+  version: 2.0.0
+  created: null  # Set on install
+
+  events: []
+    # Events are appended by /reflect and /evolve
+    # Format:
+    # - timestamp: ISO 8601
+    #   type: confidence_update|pattern_detected|skill_promoted|skill_extended|skill_archived|tricks_folded|graph_updated
+    #   details: "description"
+    #   evidence: "what triggered this"

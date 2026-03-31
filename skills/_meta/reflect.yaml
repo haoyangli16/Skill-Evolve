@@ -1,0 +1,62 @@
+meta_skill:
+  id: reflect
+  type: kernel
+  version: 2.0.0
+  evolvable: false
+  redesigned: 2026-03-30
+
+  description: |
+    Lightweight reflection that reads the worklog and updates three files:
+    _confidence.yaml, tricks.md, and gaps.md. Replaces the old 5-phase
+    kernel pipeline (decompose→select→execute→validate→reflect) with a
+    single practical operation.
+
+  inputs:
+    worklog:
+      type: file
+      path: "~/.claude/skills/worklog.jsonl"
+      description: "Append-only execution log, one JSON object per line"
+
+  outputs:
+    confidence_updates:
+      file: "_confidence.yaml"
+      description: "Bump/decay skill confidence scores"
+
+    tricks_updates:
+      file: "tricks.md"
+      description: "New techniques discovered during work"
+
+    gaps_updates:
+      file: "gaps.md"
+      description: "Unmet skill needs, candidates for /evolve"
+
+  algorithm: |
+    1. READ worklog.jsonl — find entries after last "# reflected:" marker
+    2. For each entry with a skill:
+       - If outcome=success: confidence += 0.05
+       - If outcome=partial: confidence += 0.02
+       - If outcome=failure: confidence -= 0.10
+       - Update usage_count, success_count, last_used, trend
+    3. For unused skills (no worklog entries):
+       - If last_used > 2 weeks ago: confidence -= 0.02/week (min 0.10)
+    4. For each entry with a trick field:
+       - Append to tricks.md under the skill's section
+    5. For each entry with skill=null or a gap field:
+       - Add/increment in gaps.md
+       - If occurrences >= 3: mark as candidate
+    6. Append reflection marker to worklog.jsonl
+    7. Write summary to stdout
+
+  confidence_rules:
+    on_success: "+0.05"
+    on_partial: "+0.02"
+    on_failure: "-0.10"
+    weekly_decay_unused: "-0.02"
+    max_score: 0.99
+    min_score: 0.10
+
+  # Old system reference (deprecated)
+  # Previously this was a 5-kernel pipeline:
+  #   decompose.yaml → select.yaml → execute.yaml → validate.yaml → reflect.yaml
+  # The queue/worker/tmux system was never used in practice.
+  # This v2 replaces all of that with: worklog → reflect → evolve

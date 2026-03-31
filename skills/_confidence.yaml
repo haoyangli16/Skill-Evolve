@@ -1,0 +1,94 @@
+# Skill Confidence Scores
+# Updated by /reflect after processing the worklog
+
+confidence:
+  version: 2.0.0
+  updated: null  # Set by first /reflect run
+
+  # Add your skills here. Example format:
+  # skill_domain:
+  #   skill_name:
+  #     score: 0.85
+  #     usage_count: 0
+  #     success_count: 0
+  #     last_used: null
+  #     trend: stable
+  #     notes: "Description"
+
+  # Starter skills — customize to your workflow
+  development:
+    api_development:
+      score: 0.85
+      usage_count: 0
+      success_count: 0
+      last_used: null
+      trend: stable
+      notes: "REST/GraphQL API design and implementation"
+
+    frontend_development:
+      score: 0.80
+      usage_count: 0
+      success_count: 0
+      last_used: null
+      trend: stable
+      notes: "UI components, React/Vue/Angular"
+
+    testing:
+      score: 0.85
+      usage_count: 0
+      success_count: 0
+      last_used: null
+      trend: stable
+      notes: "Unit and integration testing"
+
+    debugging:
+      score: 0.85
+      usage_count: 0
+      success_count: 0
+      last_used: null
+      trend: stable
+      notes: "Systematic bug investigation"
+
+    refactoring:
+      score: 0.82
+      usage_count: 0
+      success_count: 0
+      last_used: null
+      trend: stable
+      notes: "Code quality improvement"
+
+  research:
+    deep_research:
+      score: 0.80
+      usage_count: 0
+      success_count: 0
+      last_used: null
+      trend: stable
+      notes: "Multi-step research orchestration"
+
+  operations:
+    deployment:
+      score: 0.75
+      usage_count: 0
+      success_count: 0
+      last_used: null
+      trend: stable
+      notes: "Docker, CI/CD, cloud deployment"
+
+    documentation:
+      score: 0.88
+      usage_count: 0
+      success_count: 0
+      last_used: null
+      trend: stable
+      notes: "Technical writing"
+
+# Evolution thresholds
+thresholds:
+  promotion_minimum: 0.70
+  archival_maximum: 0.30
+  decay_rate_per_week: 0.02
+  success_boost: 0.05
+  failure_penalty: 0.10
+  max_score: 0.99
+  min_score: 0.10

@@ -1,0 +1,62 @@
+meta_skill:
+  id: select
+  type: kernel
+  version: 2.0.0
+  evolvable: false
+  redesigned: 2026-03-30
+
+  description: |
+    Choose the best skill for a task by reading the graph, confidence
+    scores, and accumulated tricks. Simplified from v1 which used
+    queue-based task creation and worker assignment.
+
+  inputs:
+    task_description:
+      type: string
+      description: "What needs to be accomplished"
+
+    context:
+      type: object
+      description: "Current project, language, framework, etc."
+
+  outputs:
+    selected_skill:
+      type: object
+      properties:
+        skill_id: string
+        domain: string
+        confidence: float
+        relevant_tricks: array
+
+  algorithm: |
+    1. READ _confidence.yaml — get all skills with scores
+    2. READ _graph.yaml — get skill relationships
+    3. MATCH task keywords against skill triggers:
+       - Check skill YAML `triggers.keywords` fields
+       - Check skill domain names against task description
+       - Score each skill: keyword_match(0.3) + context_match(0.3) + confidence(0.4)
+    4. CHECK prerequisites:
+       - For top candidates, verify required skills are available (graph edges)
+       - Penalize skills with unmet prerequisites (-0.2)
+    5. SELECT highest scoring skill
+    6. LOAD relevant tricks from tricks.md:
+       - Read the section matching selected skill's domain
+       - Filter tricks by context relevance to current task
+    7. RETURN skill + tricks bundle for execution
+
+  # The agent then uses the selected skill's technique + tricks
+  # as guidance for completing the task. No queue, no workers —
+  # Claude Code itself is the executor.
+
+  skill_matching:
+    keyword_weight: 0.3
+    context_weight: 0.3
+    confidence_weight: 0.4
+    prerequisite_penalty: 0.2
+    minimum_threshold: 0.3
+
+  # If no skill scores above threshold:
+  fallback: |
+    1. Log to gaps.md as a potential new skill need
+    2. Proceed with general problem-solving
+    3. After completion, log to worklog with skill=null

@@ -1,0 +1,8 @@
+{"ts":"2026-03-30T10:00:00Z","skill":"api_development","task":"Build REST API with auth","outcome":"success","trick":"Use zod schemas as source of truth — derive TS types with z.infer","duration_min":15}
+{"ts":"2026-03-30T11:00:00Z","skill":"debugging","task":"Fix auth middleware ordering","outcome":"success","trick":"Middleware order is the #1 cause of Express auth failures — always check ordering first","duration_min":8}
+{"ts":"2026-03-30T11:30:00Z","skill":null,"task":"Generate PDF evaluation report","outcome":"partial","gap":"No skill for PDF report generation with embedded charts","duration_min":25}
+{"ts":"2026-03-30T14:00:00Z","skill":"testing","task":"Write integration tests for auth flow","outcome":"success","trick":null,"duration_min":20}
+{"ts":"2026-03-30T15:00:00Z","skill":null,"task":"Create PDF with matplotlib figures","outcome":"partial","gap":"No skill for PDF report generation with embedded charts","duration_min":30}
+# reflected: 2026-03-30T16:00:00Z | entries: 5 | tricks: 2 | gaps: 1 | confidence_updates: 3
+{"ts":"2026-03-31T09:00:00Z","skill":"api_development","task":"Add rate limiting to API","outcome":"success","trick":"Use express-rate-limit with Redis store for distributed rate limiting","duration_min":12}
+{"ts":"2026-03-31T10:30:00Z","skill":null,"task":"Generate PDF summary for stakeholders","outcome":"failure","gap":"No skill for PDF report generation with embedded charts","duration_min":35}

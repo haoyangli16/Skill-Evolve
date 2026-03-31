@@ -1,0 +1,65 @@
+# Skill Graph - Defines relationships between skills
+# Edges only; nodes are defined by _confidence.yaml entries
+
+graph:
+  version: 2.0.0
+
+  # Relationship types:
+  # - requires: Must complete before (hard dependency)
+  # - enables: Opens up possibility for (soft dependency)
+  # - composes: Made up of (aggregation)
+  # - enhances: Makes better but not required
+
+  edges:
+    # Development domain
+    - from: api_development
+      to: project_setup
+      type: requires
+      strength: 0.9
+
+    - from: frontend_development
+      to: api_development
+      type: enables
+      strength: 0.8
+
+    - from: testing
+      to: api_development
+      type: enables
+      strength: 0.9
+
+    - from: deployment
+      to: testing
+      type: requires
+      strength: 0.95
+
+    - from: refactoring
+      to: debugging
+      type: enables
+      strength: 0.5
+
+    # Research domain
+    - from: deep_research
+      to: web_search
+      type: requires
+      strength: 0.7
+
+    # Cross-domain
+    - from: documentation
+      to: api_development
+      type: enhances
+      strength: 0.5
+
+  # Graph traversal helpers
+  traversal:
+    entry_points:
+      - web_search
+      - project_setup
+      - deep_research
+
+    leaf_nodes:
+      - documentation
+      - deployment
+
+    hubs:
+      - api_development
+      - testing
