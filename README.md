@@ -63,17 +63,20 @@ A skill used 20 times across different projects has a rich tricks library that a
 ## Install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/skill-evolve.git
+git clone https://github.com/haoyangli16/Skill-Evolve.git
 cd skill-evolve
 chmod +x install.sh
 ./install.sh
 ```
 
 The installer:
-- Copies skill files to `~/.claude/skills/`
+- Copies skill files to `~/.claude/skills/` (won't overwrite your data files)
 - Configures Claude Code hooks in `~/.claude/settings.json`
 - Adds the autopilot behavioral rule to `~/.claude/CLAUDE.md`
-- Won't overwrite your existing files (safe to re-run)
+- Always updates skill commands and hook scripts to latest version
+- Safe to re-run (idempotent for data, always-latest for commands)
+
+> **Note**: If you already have a `~/.claude/settings.json`, the installer won't modify it automatically. It will print instructions and save the hooks to `hooks-snippet.json` for you to merge manually.
 
 ### Manual install
 
@@ -81,8 +84,44 @@ If you prefer to install manually:
 
 1. Copy the `skills/` directory contents to `~/.claude/skills/`
 2. Make scripts executable: `chmod +x ~/.claude/skills/bin/*.sh`
-3. Add the hooks from `hooks-snippet.json` to your `~/.claude/settings.json`
-4. Append `claude-md-snippet.md` to your `~/.claude/CLAUDE.md`
+3. Merge the hooks from [`hooks-snippet.json`](hooks-snippet.json) into your `~/.claude/settings.json`
+4. Append [`claude-md-snippet.md`](claude-md-snippet.md) to your `~/.claude/CLAUDE.md`
+
+<details>
+<summary>Hooks to add to settings.json</summary>
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/skills/bin/auto-reflect-check.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/skills/bin/session-prime.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+</details>
 
 ## Usage
 

@@ -17,6 +17,14 @@ confidence:
 
   # Starter skills — customize to your workflow
   development:
+    project_setup:
+      score: 0.90
+      usage_count: 0
+      success_count: 0
+      last_used: null
+      trend: stable
+      notes: "Project scaffolding, config, and directory structure"
+
     api_development:
       score: 0.85
       usage_count: 0
@@ -58,6 +66,14 @@ confidence:
       notes: "Code quality improvement"
 
   research:
+    web_search:
+      score: 0.85
+      usage_count: 0
+      success_count: 0
+      last_used: null
+      trend: stable
+      notes: "Web search and information gathering"
+
     deep_research:
       score: 0.80
       usage_count: 0

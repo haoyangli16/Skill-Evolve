@@ -97,42 +97,22 @@ else
   if grep -q "auto-reflect-check" "$SETTINGS" 2>/dev/null; then
     echo "  SKIP hooks already configured in $SETTINGS"
   else
-    echo ""
-    echo "  WARNING: $SETTINGS already exists."
-    echo "  Please manually add the hooks from the README to your settings.json."
-    echo "  (We don't want to break your existing configuration.)"
-    echo ""
-    echo "  The hooks to add are saved to: $SCRIPT_DIR/hooks-snippet.json"
-    cat > "$SCRIPT_DIR/hooks-snippet.json" << 'HOOKS_EOF'
-{
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/skills/bin/auto-reflect-check.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/skills/bin/session-prime.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ]
-  }
-}
-HOOKS_EOF
+    # Try auto-merge with jq if available
+    if command -v jq &>/dev/null; then
+      echo "  Merging hooks into existing $SETTINGS (via jq)..."
+      HOOKS_JSON=$(cat "$SCRIPT_DIR/hooks-snippet.json")
+      jq --argjson hooks "$(echo "$HOOKS_JSON" | jq '.hooks')" '
+        .hooks = ((.hooks // {}) * $hooks)
+      ' "$SETTINGS" > "${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "$SETTINGS"
+      echo "  MERGED hooks into $SETTINGS"
+    else
+      echo ""
+      echo "  WARNING: $SETTINGS already exists and jq is not installed."
+      echo "  Please manually merge the hooks from hooks-snippet.json into your settings.json."
+      echo "  (Install jq to enable auto-merge: brew install jq / apt install jq)"
+      echo ""
+      echo "  See hooks-snippet.json for the hooks to add."
+    fi
   fi
 fi
 
